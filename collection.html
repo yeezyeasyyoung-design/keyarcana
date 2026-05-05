@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>KeyArcana · Моя коллекция</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #06040a;
+      font-family: 'Jost', sans-serif;
+      color: #ede4f5;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd966' d='M12 2l2.5 7.5H22l-6 4.5 2.5 7.5L12 17l-6.5 4.5L8 14l-6-4.5h7.5z'/%3E%3C/svg%3E"), auto;
+    }
+    .bg-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 30% 20%, #1e1238 0%, #06040a 75%);
+      z-index: -1;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 30px 5vw; }
+    h1 { font-family: 'Cormorant Garamond', serif; color: #ffd966; font-size: 3.5rem; text-align: center; margin: 30px 0 10px; text-shadow: 0 0 20px #ffd966; }
+    .back-link {
+      display: inline-block; margin: 10px 0 20px; color: #ffd966; text-decoration: none;
+      font-weight: 500; font-size: 1.1rem; transition: 0.3s; cursor: pointer;
+      background: none; border: none; font-family: 'Jost', sans-serif;
+    }
+    .back-link:hover { color: #ffcc00; text-shadow: 0 0 10px #ffd966; }
+    .progress { text-align: center; margin-bottom: 30px; font-size: 1.4rem; }
+    .progress span { color: #ffd966; font-weight: bold; }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 25px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+    .card-item {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: #1a112a;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: #7b6d92;
+      border: 2px solid #3d2b5c;
+      transition: all 0.4s ease;
+      filter: grayscale(100%);
+      opacity: 0.6;
+      cursor: pointer;
+      text-align: center;
+      padding: 10px;
+    }
+    .card-item.owned {
+      filter: grayscale(0%);
+      opacity: 1;
+      border-color: #ffd966;
+      box-shadow: 0 0 20px #ffd966;
+      background: #2a1b3d;
+      color: #ffd966;
+      font-weight: bold;
+      transform: scale(1.03);
+    }
+    .card-emoji { font-size: 3.5rem; margin-bottom: 8px; }
+    .card-name { font-size: 0.9rem; line-height: 1.2; }
+    footer { text-align: center; margin-top: 50px; padding: 20px 0; color: #7b6d92; }
+  </style>
+</head>
+<body>
+<div class="bg-overlay"></div>
+<div class="container">
+  <!-- Кнопка строго через JavaScript, чтобы избежать ошибок с путём -->
+  <button onclick="window.location.href='index.html'" class="back-link">← На главную</button>
+  <h1>✦ Моя Коллекция ✦</h1>
+  <div class="progress"><span id="ownedCount">0</span> / 22 карт собрано</div>
+  <div class="collection-grid" id="grid"></div>
+  <footer>Собирайте карты, чтобы получить скидку 20% на любую услугу</footer>
+</div>
+
+<script>
+  const cards = [
+    { name: "Шут", emoji: "🃏" },
+    { name: "Маг", emoji: "🧙" },
+    { name: "Верховная Жрица", emoji: "🔮" },
+    { name: "Императрица", emoji: "👑" },
+    { name: "Император", emoji: "🏛️" },
+    { name: "Иерофант", emoji: "📿" },
+    { name: "Влюблённые", emoji: "❤️" },
+    { name: "Колесница", emoji: "🐴" },
+    { name: "Сила", emoji: "🦁" },
+    { name: "Отшельник", emoji: "🏔️" },
+    { name: "Колесо Фортуны", emoji: "🎡" },
+    { name: "Справедливость", emoji: "⚖️" },
+    { name: "Повешенный", emoji: "🪢" },
+    { name: "Смерть", emoji: "💀" },
+    { name: "Умеренность", emoji: "⚗️" },
+    { name: "Дьявол", emoji: "😈" },
+    { name: "Башня", emoji: "🏰" },
+    { name: "Звезда", emoji: "⭐" },
+    { name: "Луна", emoji: "🌙" },
+    { name: "Солнце", emoji: "☀️" },
+    { name: "Суд", emoji: "📯" },
+    { name: "Мир", emoji: "🌍" }
+  ];
+
+  const COLLECTION_KEY = 'keyarcana_collection';
+
+  function getCollection() {
+    return JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]');
+  }
+
+  function renderCollection() {
+    const collection = getCollection();
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    cards.forEach(card => {
+      const div = document.createElement('div');
+      div.className = 'card-item' + (collection.includes(card.name) ? ' owned' : '');
+      div.innerHTML = `<div class="card-emoji">${card.emoji}</div><div class="card-name">${card.name}</div>`;
+      grid.appendChild(div);
+    });
+    document.getElementById('ownedCount').textContent = collection.length;
+  }
+
+  renderCollection();
+  window.addEventListener('storage', renderCollection);
+  setInterval(renderCollection, 1000);
+</script>
+</body>
+</html>
