@@ -13,7 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Все стили остались из твоего последнего рабочего варианта, без изменений */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #06040a;
@@ -319,8 +318,11 @@
 
 <section id="contact" class="contact-section">
   <h2>✦ Записаться ✦</h2>
-  <!-- Финальная рабочая форма через Formspree -->
-  <form class="form-grid" id="requestForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+  <!-- Форма через Formsubmit -- просто вставь почту, письма придут сразу после активации -->
+  <form class="form-grid" id="requestForm" action="https://formsubmit.co/key.arcana@mail.ru" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_subject" value="Новая заявка KeyArcana">
     <input type="text" name="name" placeholder="Ваше имя (анонимно)" required>
     <input type="text" name="contact" placeholder="Email или username" required>
     <select name="service" required>
