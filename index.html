@@ -318,11 +318,9 @@
 
 <section id="contact" class="contact-section">
   <h2>✦ Записаться ✦</h2>
-  <!-- Форма через Formsubmit -- просто вставь почту, письма придут сразу после активации -->
-  <form class="form-grid" id="requestForm" action="https://formsubmit.co/key.arcana@mail.ru" method="POST">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_subject" value="Новая заявка KeyArcana">
+  <!-- Форма через Web3Forms – заявки приходят мгновенно -->
+  <form class="form-grid" id="requestForm" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="6c84f063-e048-4fab-a15f-b15c9b635966">
     <input type="text" name="name" placeholder="Ваше имя (анонимно)" required>
     <input type="text" name="contact" placeholder="Email или username" required>
     <select name="service" required>
