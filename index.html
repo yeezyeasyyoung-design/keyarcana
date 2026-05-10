@@ -244,15 +244,88 @@
       padding: 25px; margin: 25px 0; text-align: center; font-size: 1.1rem;
     }
 
+    /* Мобильная модернизация */
     @media (max-width: 600px) {
-      header { flex-direction: column; align-items: flex-start; }
-      .nav-links { flex-wrap: wrap; gap: 10px; }
-      .hero { padding: 60px 5vw 80px; }
-      .services-grid { grid-template-columns: 1fr; }
-      .reviews-grid { grid-template-columns: 1fr; }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 5vw;
+      }
+      .logo { font-size: 2rem; }
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 5px;
+      }
+      .nav-links a {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        background: rgba(255,215,0,0.08);
+        border-radius: 20px;
+        display: inline-block;
+      }
+      .social-icons {
+        align-self: flex-end;
+        margin-top: -35px;
+      }
+
+      .hero {
+        padding: 50px 5vw 60px;
+      }
+      .hero h1 { font-size: 2.8rem; }
+      .hero p { font-size: 0.95rem; margin: 15px auto; }
+      .stats-row { gap: 12px; font-size: 0.9rem; }
+
+      .free-section {
+        padding: 30px 5vw;
+        margin: 0 5vw 30px;
+        border-radius: 24px;
+      }
+      .free-section h3 { font-size: 1.8rem; }
+      .draw-card-btn { padding: 12px 30px; font-size: 1rem; }
+
+      .services-grid,
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .service-card,
+      .review-card {
+        padding: 20px 18px;
+        border-radius: 22px;
+        min-height: auto;
+      }
+      .service-card h3 { font-size: 1.4rem; }
+
+      .contact-section { padding: 40px 5vw; margin: 40px 0; }
+      .form-grid { padding: 20px; gap: 14px; }
+      .contact-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .contact-btn {
+        width: 80%;
+        justify-content: center;
+      }
+      .gold-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+      }
+
       .modal-content { padding: 25px 20px; }
-      .contact-links { flex-direction: column; align-items: center; }
-      .gold-btn { padding: 12px 25px; font-size: 0.9rem; }
+
+      /* Иконки в заголовках услуг */
+      .service-card h3::before {
+        content: "🃏 ";
+        font-size: 1.2em;
+      }
+      .service-card:nth-child(1) h3::before { content: "⚡ "; } /* Да/Нет */
+      .service-card:nth-child(2) h3::before { content: "💞 "; } /* Чувства */
+      .service-card:nth-child(3) h3::before { content: "🌿 "; } /* Кельтский */
+      .service-card:nth-child(4) h3::before { content: "📅 "; } /* На год */
+      .service-card:nth-child(5) h3::before { content: "👑 "; } /* VIP */
+      .service-card:nth-child(6) h3::before { content: "✨ "; } /* PDF */
     }
   </style>
 </head>
