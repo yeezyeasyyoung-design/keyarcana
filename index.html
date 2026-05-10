@@ -130,6 +130,43 @@
     .draw-card-btn:hover { background: #634785; box-shadow: 0 0 25px #ffd966; }
     .draw-card-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* Анимированная карта дня */
+    .card-result-animated {
+      display: none;
+      justify-content: center;
+      margin: 30px 0;
+      animation: fadeInUp 0.6s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-drawn {
+      background: rgba(10, 5, 20, 0.9);
+      border: 2px solid #ffd966;
+      border-radius: 24px;
+      padding: 25px 20px;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255,215,0,0.4);
+    }
+    .card-drawn .card-emoji-large {
+      font-size: 5rem;
+      margin-bottom: 15px;
+    }
+    .card-drawn .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: #ffd966;
+      margin-bottom: 10px;
+    }
+    .card-drawn .card-meaning {
+      font-size: 1rem;
+      color: #cfc0e8;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
     .services-section { padding: 50px 5vw; }
     .services-grid {
       display: grid;
@@ -244,46 +281,19 @@
       padding: 25px; margin: 25px 0; text-align: center; font-size: 1.1rem;
     }
 
-    /* Анимация вытягивания карты */
-    .card-animation {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-      height: 80px;
-      align-items: center;
-    }
-    .card-mini {
-      width: 40px;
-      height: 60px;
-      background: #2a1b3d;
-      border: 1px solid #c9a03e;
-      border-radius: 6px;
-      animation: flipCard 0.6s infinite;
-    }
-    .card-mini:nth-child(1) { animation-delay: 0s; }
-    .card-mini:nth-child(2) { animation-delay: 0.2s; }
-    .card-mini:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes flipCard {
-      0% { transform: perspective(400px) rotateY(0deg); background: #2a1b3d; }
-      50% { transform: perspective(400px) rotateY(90deg); background: #634785; border-color: #ffd966; }
-      100% { transform: perspective(400px) rotateY(0deg); background: #2a1b3d; }
-    }
-
-    /* Мобильная модернизация */
     @media (max-width: 600px) {
-      body { text-align: center; }
-      .container, header, section, footer { width: 100%; padding-left: 4vw; padding-right: 4vw; }
+      body { padding: 0; }
       header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 15px 5vw;
       }
       .logo { font-size: 2rem; }
       .nav-links {
         flex-wrap: wrap;
         gap: 8px;
         margin-top: 5px;
-        justify-content: flex-start;
+        justify-content: center;
         width: 100%;
       }
       .nav-links a {
@@ -294,32 +304,57 @@
         display: inline-block;
       }
       .social-icons {
-        align-self: flex-end;
-        margin-top: -35px;
+        align-self: center;
+        margin-top: 10px;
       }
 
-      .hero { padding: 50px 4vw 60px; }
+      .hero {
+        padding: 50px 5vw 60px;
+      }
       .hero h1 { font-size: 2.8rem; }
       .hero p { font-size: 0.95rem; margin: 15px auto; }
       .stats-row { gap: 12px; font-size: 0.9rem; }
 
-      .free-section { padding: 30px 4vw; margin: 0 4vw 30px; border-radius: 24px; }
+      .free-section {
+        padding: 30px 5vw;
+        margin: 0 5vw 30px;
+        border-radius: 24px;
+      }
       .free-section h3 { font-size: 1.8rem; }
       .draw-card-btn { padding: 12px 30px; font-size: 1rem; }
 
       .services-grid,
-      .reviews-grid { grid-template-columns: 1fr; gap: 20px; }
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
       .service-card,
-      .review-card { padding: 20px 18px; border-radius: 22px; min-height: auto; }
+      .review-card {
+        padding: 20px 18px;
+        border-radius: 22px;
+        min-height: auto;
+      }
       .service-card h3 { font-size: 1.4rem; }
 
-      .contact-section { padding: 40px 4vw; margin: 40px 0; }
+      .contact-section { padding: 40px 5vw; margin: 40px 0; }
       .form-grid { padding: 20px; gap: 14px; }
-      .contact-links { flex-direction: column; align-items: center; gap: 10px; }
-      .contact-btn { width: 80%; justify-content: center; }
-      .gold-btn { padding: 12px 25px; font-size: 0.9rem; }
+      .contact-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .contact-btn {
+        width: 80%;
+        justify-content: center;
+      }
+      .gold-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+      }
+
       .modal-content { padding: 25px 20px; }
 
+      /* Иконки в заголовках услуг */
       .service-card h3::before {
         content: "🃏 ";
         font-size: 1.2em;
@@ -368,8 +403,10 @@
   <p>Сосредоточьтесь на своём вопросе · Полная анонимность · Без регистрации · Ответ за 10 секунд</p>
   <button id="drawCardBtn" class="draw-card-btn">✦ Получить расклад</button>
   <p id="freeLimitMsg" style="color: #ffd966; margin-top: 15px; display: none;">Бесплатные расклады закончились. Следующая порция через <span id="timerDisplay"></span>.</p>
-  <div id="cardFlipContainer" class="card-animation" style="display: none;"></div>
-  <div id="cardResult" style="background: rgba(0,0,0,0.4); border-radius: 16px; padding: 25px; display: none; font-size: 1.2rem; border: 1px solid #c9a03e; margin-top: 20px;"></div>
+
+  <!-- Анимированная карта -->
+  <div id="animatedCard" class="card-result-animated"></div>
+
   <div id="lockArea" style="display: none; margin-top: 25px;">
     <div style="filter: blur(6px); background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px;">Полная расшифровка и именной PDF-сертификат</div>
     <p style="margin: 10px;">🔒</p>
@@ -477,28 +514,28 @@
     });
 
     const cards = [
-      { name: "Шут", meaning: "Новые начинания, спонтанность. Доверьтесь потоку." },
-      { name: "Маг", meaning: "Сила воли, мастерство. Используйте свои ресурсы." },
-      { name: "Верховная Жрица", meaning: "Интуиция, тайна. Прислушайтесь к себе." },
-      { name: "Императрица", meaning: "Изобилие, творчество, забота." },
-      { name: "Император", meaning: "Структура, контроль, ответственность." },
-      { name: "Иерофант", meaning: "Традиции, обучение, мудрый совет." },
-      { name: "Влюблённые", meaning: "Выбор, гармония, зов сердца." },
-      { name: "Колесница", meaning: "Победа, движение вперёд, решимость." },
-      { name: "Сила", meaning: "Внутренняя стойкость, мягкая сила." },
-      { name: "Отшельник", meaning: "Поиск истины, уединение." },
-      { name: "Колесо Фортуны", meaning: "Судьбоносные перемены, удача." },
-      { name: "Справедливость", meaning: "Карма, равновесие, честность." },
-      { name: "Повешенный", meaning: "Новый взгляд, пауза." },
-      { name: "Смерть", meaning: "Трансформация, завершение старого." },
-      { name: "Умеренность", meaning: "Баланс, терпение, гармония." },
-      { name: "Дьявол", meaning: "Теневые привязанности, освобождение." },
-      { name: "Башня", meaning: "Разрушение иллюзий, внезапная правда." },
-      { name: "Звезда", meaning: "Надежда, вдохновение, вера." },
-      { name: "Луна", meaning: "Подсознание, иллюзии, интуиция." },
-      { name: "Солнце", meaning: "Радость, ясность, успех." },
-      { name: "Суд", meaning: "Пробуждение, прощение." },
-      { name: "Мир", meaning: "Завершение, целостность, достижение." }
+      { name: "Шут", meaning: "Новые начинания, спонтанность. Доверьтесь потоку.", emoji: "🃏" },
+      { name: "Маг", meaning: "Сила воли, мастерство. Используйте свои ресурсы.", emoji: "🧙" },
+      { name: "Верховная Жрица", meaning: "Интуиция, тайна. Прислушайтесь к себе.", emoji: "🔮" },
+      { name: "Императрица", meaning: "Изобилие, творчество, забота.", emoji: "👑" },
+      { name: "Император", meaning: "Структура, контроль, ответственность.", emoji: "🏛️" },
+      { name: "Иерофант", meaning: "Традиции, обучение, мудрый совет.", emoji: "📿" },
+      { name: "Влюблённые", meaning: "Выбор, гармония, зов сердца.", emoji: "❤️" },
+      { name: "Колесница", meaning: "Победа, движение вперёд, решимость.", emoji: "🐴" },
+      { name: "Сила", meaning: "Внутренняя стойкость, мягкая сила.", emoji: "🦁" },
+      { name: "Отшельник", meaning: "Поиск истины, уединение.", emoji: "🏔️" },
+      { name: "Колесо Фортуны", meaning: "Судьбоносные перемены, удача.", emoji: "🎡" },
+      { name: "Справедливость", meaning: "Карма, равновесие, честность.", emoji: "⚖️" },
+      { name: "Повешенный", meaning: "Новый взгляд, пауза.", emoji: "🪢" },
+      { name: "Смерть", meaning: "Трансформация, завершение старого.", emoji: "💀" },
+      { name: "Умеренность", meaning: "Баланс, терпение, гармония.", emoji: "⚗️" },
+      { name: "Дьявол", meaning: "Теневые привязанности, освобождение.", emoji: "😈" },
+      { name: "Башня", meaning: "Разрушение иллюзий, внезапная правда.", emoji: "🏰" },
+      { name: "Звезда", meaning: "Надежда, вдохновение, вера.", emoji: "⭐" },
+      { name: "Луна", meaning: "Подсознание, иллюзии, интуиция.", emoji: "🌙" },
+      { name: "Солнце", meaning: "Радость, ясность, успех.", emoji: "☀️" },
+      { name: "Суд", meaning: "Пробуждение, прощение.", emoji: "📯" },
+      { name: "Мир", meaning: "Завершение, целостность, достижение.", emoji: "🌍" }
     ];
 
     const FREE_STORAGE = 'keyarcana_free_v3';
@@ -659,34 +696,41 @@
     });
 
     const drawBtn = document.getElementById('drawCardBtn');
-    const resultDiv = document.getElementById('cardResult');
+    const animatedCard = document.getElementById('animatedCard');
     const lockArea = document.getElementById('lockArea');
-    const flipContainer = document.getElementById('cardFlipContainer');
 
     drawBtn.addEventListener('click', () => {
       if (!useFreeDraw()) {
         alert('Бесплатные расклады закончились. Приходите позже.');
         return;
       }
-      flipContainer.style.display = 'flex';
-      flipContainer.innerHTML = '<div class="card-mini"></div><div class="card-mini"></div><div class="card-mini"></div>';
       drawBtn.disabled = true;
+      const card = cards[Math.floor(Math.random() * cards.length)];
+      addToCollection(card.name);
+      updateCollectionInfo();
+      updateTimerDisplay();
+
+      // Анимация карты
+      animatedCard.style.display = 'flex';
+      animatedCard.innerHTML = `
+        <div class="card-drawn">
+          <div class="card-emoji-large">${card.emoji}</div>
+          <div class="card-title">${card.name}</div>
+          <div class="card-meaning">"${card.meaning}"</div>
+        </div>
+      `;
+      lockArea.style.display = 'block';
+
       setTimeout(() => {
-        flipContainer.style.display = 'none';
-        const card = cards[Math.floor(Math.random() * cards.length)];
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = `<strong style="color:#ffd966; font-size:1.8rem;">${card.name}</strong><br><em>"${card.meaning}"</em>`;
-        lockArea.style.display = 'block';
-        addToCollection(card.name);
-        updateCollectionInfo();
-        updateTimerDisplay();
-        document.getElementById('payBtn').onclick = () => alert('🔓 Полная расшифровка и PDF-сертификат за 199₽ (демо)');
-        document.getElementById('shareBtn').onclick = () => {
-          const text = `Моя карта Таро: ${card.name} — ${card.meaning}`;
-          if (navigator.share) navigator.share({ title: 'KeyArcana', text });
-          else alert('Скопируйте: ' + text);
-        };
-      }, 1500);
+        drawBtn.disabled = false;
+      }, 600);
+
+      document.getElementById('payBtn').onclick = () => alert('🔓 Полная расшифровка и PDF-сертификат за 199₽ (демо)');
+      document.getElementById('shareBtn').onclick = () => {
+        const text = `Моя карта Таро: ${card.name} — ${card.meaning}`;
+        if (navigator.share) navigator.share({ title: 'KeyArcana', text });
+        else alert('Скопируйте: ' + text);
+      };
     });
 
     document.getElementById('requestForm').addEventListener('submit', function(e) {
