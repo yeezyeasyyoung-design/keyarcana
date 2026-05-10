@@ -244,18 +244,47 @@
       padding: 25px; margin: 25px 0; text-align: center; font-size: 1.1rem;
     }
 
+    /* Анимация вытягивания карты */
+    .card-animation {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+      height: 80px;
+      align-items: center;
+    }
+    .card-mini {
+      width: 40px;
+      height: 60px;
+      background: #2a1b3d;
+      border: 1px solid #c9a03e;
+      border-radius: 6px;
+      animation: flipCard 0.6s infinite;
+    }
+    .card-mini:nth-child(1) { animation-delay: 0s; }
+    .card-mini:nth-child(2) { animation-delay: 0.2s; }
+    .card-mini:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes flipCard {
+      0% { transform: perspective(400px) rotateY(0deg); background: #2a1b3d; }
+      50% { transform: perspective(400px) rotateY(90deg); background: #634785; border-color: #ffd966; }
+      100% { transform: perspective(400px) rotateY(0deg); background: #2a1b3d; }
+    }
+
     /* Мобильная модернизация */
     @media (max-width: 600px) {
+      body { text-align: center; }
+      .container, header, section, footer { width: 100%; padding-left: 4vw; padding-right: 4vw; }
       header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 12px 5vw;
       }
       .logo { font-size: 2rem; }
       .nav-links {
         flex-wrap: wrap;
         gap: 8px;
         margin-top: 5px;
+        justify-content: flex-start;
+        width: 100%;
       }
       .nav-links a {
         font-size: 0.9rem;
@@ -269,63 +298,38 @@
         margin-top: -35px;
       }
 
-      .hero {
-        padding: 50px 5vw 60px;
-      }
+      .hero { padding: 50px 4vw 60px; }
       .hero h1 { font-size: 2.8rem; }
       .hero p { font-size: 0.95rem; margin: 15px auto; }
       .stats-row { gap: 12px; font-size: 0.9rem; }
 
-      .free-section {
-        padding: 30px 5vw;
-        margin: 0 5vw 30px;
-        border-radius: 24px;
-      }
+      .free-section { padding: 30px 4vw; margin: 0 4vw 30px; border-radius: 24px; }
       .free-section h3 { font-size: 1.8rem; }
       .draw-card-btn { padding: 12px 30px; font-size: 1rem; }
 
       .services-grid,
-      .reviews-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
+      .reviews-grid { grid-template-columns: 1fr; gap: 20px; }
       .service-card,
-      .review-card {
-        padding: 20px 18px;
-        border-radius: 22px;
-        min-height: auto;
-      }
+      .review-card { padding: 20px 18px; border-radius: 22px; min-height: auto; }
       .service-card h3 { font-size: 1.4rem; }
 
-      .contact-section { padding: 40px 5vw; margin: 40px 0; }
+      .contact-section { padding: 40px 4vw; margin: 40px 0; }
       .form-grid { padding: 20px; gap: 14px; }
-      .contact-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-      .contact-btn {
-        width: 80%;
-        justify-content: center;
-      }
-      .gold-btn {
-        padding: 12px 25px;
-        font-size: 0.9rem;
-      }
-
+      .contact-links { flex-direction: column; align-items: center; gap: 10px; }
+      .contact-btn { width: 80%; justify-content: center; }
+      .gold-btn { padding: 12px 25px; font-size: 0.9rem; }
       .modal-content { padding: 25px 20px; }
 
-      /* Иконки в заголовках услуг */
       .service-card h3::before {
         content: "🃏 ";
         font-size: 1.2em;
       }
-      .service-card:nth-child(1) h3::before { content: "⚡ "; } /* Да/Нет */
-      .service-card:nth-child(2) h3::before { content: "💞 "; } /* Чувства */
-      .service-card:nth-child(3) h3::before { content: "🌿 "; } /* Кельтский */
-      .service-card:nth-child(4) h3::before { content: "📅 "; } /* На год */
-      .service-card:nth-child(5) h3::before { content: "👑 "; } /* VIP */
-      .service-card:nth-child(6) h3::before { content: "✨ "; } /* PDF */
+      .service-card:nth-child(1) h3::before { content: "⚡ "; }
+      .service-card:nth-child(2) h3::before { content: "💞 "; }
+      .service-card:nth-child(3) h3::before { content: "🌿 "; }
+      .service-card:nth-child(4) h3::before { content: "📅 "; }
+      .service-card:nth-child(5) h3::before { content: "👑 "; }
+      .service-card:nth-child(6) h3::before { content: "✨ "; }
     }
   </style>
 </head>
@@ -364,7 +368,7 @@
   <p>Сосредоточьтесь на своём вопросе · Полная анонимность · Без регистрации · Ответ за 10 секунд</p>
   <button id="drawCardBtn" class="draw-card-btn">✦ Получить расклад</button>
   <p id="freeLimitMsg" style="color: #ffd966; margin-top: 15px; display: none;">Бесплатные расклады закончились. Следующая порция через <span id="timerDisplay"></span>.</p>
-  <div id="cardFlipContainer" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;"></div>
+  <div id="cardFlipContainer" class="card-animation" style="display: none;"></div>
   <div id="cardResult" style="background: rgba(0,0,0,0.4); border-radius: 16px; padding: 25px; display: none; font-size: 1.2rem; border: 1px solid #c9a03e; margin-top: 20px;"></div>
   <div id="lockArea" style="display: none; margin-top: 25px;">
     <div style="filter: blur(6px); background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px;">Полная расшифровка и именной PDF-сертификат</div>
@@ -665,7 +669,7 @@
         return;
       }
       flipContainer.style.display = 'flex';
-      flipContainer.innerHTML = '<div class="flip-card"></div><div class="flip-card"></div><div class="flip-card"></div>';
+      flipContainer.innerHTML = '<div class="card-mini"></div><div class="card-mini"></div><div class="card-mini"></div>';
       drawBtn.disabled = true;
       setTimeout(() => {
         flipContainer.style.display = 'none';
