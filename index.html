@@ -130,43 +130,7 @@
     .draw-card-btn:hover { background: #634785; box-shadow: 0 0 25px #ffd966; }
     .draw-card-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Анимированная карта дня */
-    .card-result-animated {
-      display: none;
-      justify-content: center;
-      margin: 30px 0;
-      animation: fadeInUp 0.6s ease;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .card-drawn {
-      background: rgba(10, 5, 20, 0.9);
-      border: 2px solid #ffd966;
-      border-radius: 24px;
-      padding: 25px 20px;
-      max-width: 320px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(255,215,0,0.4);
-    }
-    .card-drawn .card-emoji-large {
-      font-size: 5rem;
-      margin-bottom: 15px;
-    }
-    .card-drawn .card-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      color: #ffd966;
-      margin-bottom: 10px;
-    }
-    .card-drawn .card-meaning {
-      font-size: 1rem;
-      color: #cfc0e8;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-
+    /* Карточки услуг */
     .services-section { padding: 50px 5vw; }
     .services-grid {
       display: grid;
@@ -198,6 +162,41 @@
     .old-price { text-decoration: line-through; color: #b0a0cc; font-size: 1rem; }
     .new-price { color: #ffd966; font-weight: 700; font-size: 1.8rem; text-shadow: 0 0 5px #ffd700; }
 
+    /* Анимация выбора карты */
+    .card-reveal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      animation: fadeInUp 0.5s ease;
+    }
+    .card-reveal .card-emoji {
+      font-size: 5rem;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 15px #ffd966);
+    }
+    .card-reveal .card-title {
+      font-size: 2rem;
+      color: #ffd966;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card-reveal .card-meaning {
+      font-size: 1.1rem;
+      color: #e0d4f5;
+      max-width: 400px;
+      text-align: center;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lock-box { margin-top: 20px; display: none; }
+    .blur-text { filter: blur(6px); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; color: #aaa; font-size: 0.9rem; }
+
+    /* Модальное окно */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal-content {
@@ -210,6 +209,7 @@
     .modal-content p { color: #cfc0e8; font-size: 1rem; line-height: 1.7; margin-bottom: 25px; }
     .modal-content .gold-btn { width: auto; }
 
+    /* Отзывы */
     .reviews-section { padding: 50px 5vw; }
     .reviews-grid {
       display: grid;
@@ -221,6 +221,7 @@
     .stars { color: #ffd966; font-size: 1.2rem; margin-bottom: 12px; }
     .review-tag { color: #ffd966; font-size: 0.9rem; margin-top: 15px; display: block; }
 
+    /* Контакты */
     .contact-section {
       padding: 50px 5vw; background: rgba(18, 10, 32, 0.9);
       border-top: 2px solid #c9a03e; border-bottom: 2px solid #c9a03e;
@@ -281,43 +282,42 @@
       padding: 25px; margin: 25px 0; text-align: center; font-size: 1.1rem;
     }
 
+    /* Мобильная версия */
     @media (max-width: 600px) {
-      body { padding: 0; }
+      body { cursor: auto; }
       header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 15px 5vw;
+        padding: 12px 6vw;
       }
       .logo { font-size: 2rem; }
       .nav-links {
         flex-wrap: wrap;
         gap: 8px;
-        margin-top: 5px;
-        justify-content: center;
-        width: 100%;
+        margin-top: 8px;
       }
       .nav-links a {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-        background: rgba(255,215,0,0.08);
+        font-size: 0.85rem;
+        padding: 5px 10px;
+        background: rgba(255,215,0,0.1);
         border-radius: 20px;
-        display: inline-block;
       }
       .social-icons {
-        align-self: center;
-        margin-top: 10px;
+        align-self: flex-end;
+        margin-top: -36px;
       }
 
       .hero {
-        padding: 50px 5vw 60px;
+        padding: 50px 6vw 60px;
+        background-position: center top;
       }
       .hero h1 { font-size: 2.8rem; }
-      .hero p { font-size: 0.95rem; margin: 15px auto; }
-      .stats-row { gap: 12px; font-size: 0.9rem; }
+      .hero p { font-size: 0.9rem; margin: 12px auto; }
+      .stats-row { gap: 10px; font-size: 0.85rem; }
 
       .free-section {
-        padding: 30px 5vw;
-        margin: 0 5vw 30px;
+        margin: 0 6vw 30px;
+        padding: 30px 4vw;
         border-radius: 24px;
       }
       .free-section h3 { font-size: 1.8rem; }
@@ -328,15 +328,17 @@
         grid-template-columns: 1fr;
         gap: 20px;
       }
-      .service-card,
-      .review-card {
-        padding: 20px 18px;
+      .service-card {
+        padding: 20px 16px;
         border-radius: 22px;
         min-height: auto;
       }
       .service-card h3 { font-size: 1.4rem; }
+      .service-desc { font-size: 0.9rem; }
+      .new-price { font-size: 1.5rem; }
+      .old-price { font-size: 0.9rem; }
 
-      .contact-section { padding: 40px 5vw; margin: 40px 0; }
+      .contact-section { padding: 40px 6vw; margin: 40px 0; }
       .form-grid { padding: 20px; gap: 14px; }
       .contact-links {
         flex-direction: column;
@@ -346,25 +348,33 @@
       .contact-btn {
         width: 80%;
         justify-content: center;
+        font-size: 0.9rem;
       }
       .gold-btn {
         padding: 12px 25px;
         font-size: 0.9rem;
       }
-
       .modal-content { padding: 25px 20px; }
 
-      /* Иконки в заголовках услуг */
+      .card-reveal .card-emoji { font-size: 4rem; }
+      .card-reveal .card-title { font-size: 1.6rem; }
+      .card-reveal .card-meaning { font-size: 1rem; }
+      .collection-link-block { padding: 20px; font-size: 1rem; }
+      footer { padding: 25px 6vw; font-size: 0.8rem; }
+
+      /* Иконки для услуг */
       .service-card h3::before {
-        content: "🃏 ";
+        display: inline-block;
+        margin-right: 6px;
         font-size: 1.2em;
+        vertical-align: middle;
       }
-      .service-card:nth-child(1) h3::before { content: "⚡ "; }
-      .service-card:nth-child(2) h3::before { content: "💞 "; }
-      .service-card:nth-child(3) h3::before { content: "🌿 "; }
-      .service-card:nth-child(4) h3::before { content: "📅 "; }
-      .service-card:nth-child(5) h3::before { content: "👑 "; }
-      .service-card:nth-child(6) h3::before { content: "✨ "; }
+      .service-card:nth-child(1) h3::before { content: "⚡"; }
+      .service-card:nth-child(2) h3::before { content: "💞"; }
+      .service-card:nth-child(3) h3::before { content: "🌿"; }
+      .service-card:nth-child(4) h3::before { content: "📅"; }
+      .service-card:nth-child(5) h3::before { content: "👑"; }
+      .service-card:nth-child(6) h3::before { content: "✨"; }
     }
   </style>
 </head>
@@ -403,12 +413,10 @@
   <p>Сосредоточьтесь на своём вопросе · Полная анонимность · Без регистрации · Ответ за 10 секунд</p>
   <button id="drawCardBtn" class="draw-card-btn">✦ Получить расклад</button>
   <p id="freeLimitMsg" style="color: #ffd966; margin-top: 15px; display: none;">Бесплатные расклады закончились. Следующая порция через <span id="timerDisplay"></span>.</p>
-
-  <!-- Анимированная карта -->
-  <div id="animatedCard" class="card-result-animated"></div>
-
-  <div id="lockArea" style="display: none; margin-top: 25px;">
-    <div style="filter: blur(6px); background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px;">Полная расшифровка и именной PDF-сертификат</div>
+  <div id="cardFlipContainer" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;"></div>
+  <div id="cardResult"></div>
+  <div id="lockArea" class="lock-box">
+    <div class="blur-text">Полная расшифровка и именной PDF-сертификат</div>
     <p style="margin: 10px;">🔒</p>
     <button class="gold-btn" id="payBtn">Получить сертификат за 199₽</button>
     <button class="gold-btn" id="shareBtn" style="background: #4b3366; margin-left:10px;">📤 Поделиться</button>
@@ -696,7 +704,7 @@
     });
 
     const drawBtn = document.getElementById('drawCardBtn');
-    const animatedCard = document.getElementById('animatedCard');
+    const resultDiv = document.getElementById('cardResult');
     const lockArea = document.getElementById('lockArea');
 
     drawBtn.addEventListener('click', () => {
@@ -704,27 +712,18 @@
         alert('Бесплатные расклады закончились. Приходите позже.');
         return;
       }
-      drawBtn.disabled = true;
       const card = cards[Math.floor(Math.random() * cards.length)];
-      addToCollection(card.name);
-      updateCollectionInfo();
-      updateTimerDisplay();
-
-      // Анимация карты
-      animatedCard.style.display = 'flex';
-      animatedCard.innerHTML = `
-        <div class="card-drawn">
-          <div class="card-emoji-large">${card.emoji}</div>
+      resultDiv.innerHTML = `
+        <div class="card-reveal">
+          <div class="card-emoji">${card.emoji}</div>
           <div class="card-title">${card.name}</div>
-          <div class="card-meaning">"${card.meaning}"</div>
+          <div class="card-meaning">${card.meaning}</div>
         </div>
       `;
       lockArea.style.display = 'block';
-
-      setTimeout(() => {
-        drawBtn.disabled = false;
-      }, 600);
-
+      addToCollection(card.name);
+      updateCollectionInfo();
+      updateTimerDisplay();
       document.getElementById('payBtn').onclick = () => alert('🔓 Полная расшифровка и PDF-сертификат за 199₽ (демо)');
       document.getElementById('shareBtn').onclick = () => {
         const text = `Моя карта Таро: ${card.name} — ${card.meaning}`;
