@@ -42,12 +42,18 @@
     <style>
         /* === Сброс и основа === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            overflow-x: hidden;
+            width: 100%;
+        }
         body {
             background: #06040a;
             font-family: 'Jost', sans-serif;
             color: #ede4f5;
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            width: 100%;
             cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd966' d='M12 2l2.5 7.5H22l-6 4.5 2.5 7.5L12 17l-6.5 4.5L8 14l-6-4.5h7.5z'/%3E%3C/svg%3E"), auto;
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
@@ -99,6 +105,7 @@
             display: inline-block; text-decoration: none;
             will-change: transform;
             position: relative; overflow: hidden;
+            white-space: nowrap;
         }
         .gold-btn:active { transform: scale(0.96); }
         .gold-btn:hover { background: #ffea9e; box-shadow: 0 0 50px #ffcc00; transform: translateY(-2px); }
@@ -116,10 +123,11 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            width: 100%;
         }
         .logo { font-size: 2.2rem; color: #ffd966; font-weight: 700; text-shadow: 0 0 10px #c9a03e; }
         .logo span { color: #b380ff; }
-        .nav-links { display: flex; gap: 15px; list-style: none; }
+        .nav-links { display: flex; gap: 15px; list-style: none; flex-wrap: wrap; }
         .nav-links a { color: #dac0ff; text-decoration: none; font-size: 1rem; font-weight: 500; transition: 0.3s; }
         .nav-links a:hover { color: #ffd966; text-shadow: 0 0 10px #ffd966; }
         .social-icons { display: flex; gap: 10px; }
@@ -138,6 +146,7 @@
             background: url('https://i.ibb.co/C5P7kBkW/geekbot-ru-1776457159268.png') center/cover no-repeat;
             background-color: rgba(6, 4, 10, 0.7);
             background-blend-mode: overlay;
+            width: 100%;
         }
         .hero::after {
             content: "";
@@ -157,6 +166,7 @@
             text-align: center;
             position: relative;
             box-shadow: 0 0 45px rgba(201, 160, 62, 0.2);
+            width: auto;
         }
         .free-section::before, .free-section::after {
             content: "✦"; position: absolute; font-size: 2.5rem; color: #ffd966; opacity: 0.5; text-shadow: 0 0 15px #ffd966;
@@ -168,6 +178,7 @@
             background: #4b3366; border: 1px solid #ffd966; color: white; font-weight: 600;
             padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 1.1rem; margin: 20px 0;
             transition: 0.3s;
+            white-space: nowrap;
         }
         .draw-card-btn:active { transform: scale(0.96); }
         .draw-card-btn:hover { background: #634785; box-shadow: 0 0 25px #ffd966; }
@@ -198,6 +209,7 @@
             color: #e0d4f5;
             max-width: 400px;
             text-align: center;
+            word-break: break-word;
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -208,12 +220,13 @@
         .blur-text { filter: blur(6px); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; color: #aaa; font-size: 0.9rem; }
 
         /* Услуги */
-        .services-section { padding: 50px 5vw; }
+        .services-section { padding: 50px 5vw; width: 100%; }
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin-top: 30px;
+            width: 100%;
         }
         .service-card {
             position: relative; background-size: cover; background-position: center;
@@ -221,6 +234,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
             display: flex; flex-direction: column; gap: 15px; text-align: left; overflow: hidden;
             box-shadow: 0 0 0 rgba(201, 160, 62, 0); cursor: pointer; isolation: isolate; min-height: 300px;
+            max-width: 100%;
         }
         .service-card::before {
             content: ""; position: absolute; inset: 0;
@@ -245,7 +259,7 @@
 
         /* Модальное окно */
         .modal-overlay {
-            display: flex;                     /* меняем на flex для управления */
+            display: flex;
             align-items: center; justify-content: center;
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.85);
@@ -253,12 +267,14 @@
             visibility: hidden;
             opacity: 0;
             transition: visibility 0.2s, opacity 0.2s;
+            width: 100%;
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
         .modal-content {
             background: #1a112f; border: 2px solid #ffd966; border-radius: 32px;
-            padding: 30px 25px; max-width: 600px; width: 100%; text-align: left; position: relative;
+            padding: 30px 25px; max-width: 600px; width: 90%; text-align: left; position: relative;
             box-shadow: 0 0 60px rgba(255,215,0,0.4);
+            margin: 0 auto;
         }
         .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #ffd966; font-size: 2rem; cursor: pointer; }
         .modal-content h3 { color: #ffd966; font-size: 2rem; margin-bottom: 20px; }
@@ -266,8 +282,8 @@
         .modal-content .gold-btn { width: auto; }
 
         /* Отзывы */
-        .reviews-section { padding: 50px 5vw; }
-        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .reviews-section { padding: 50px 5vw; width: 100%; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; width: 100%; }
         .review-card { background: rgba(24, 14, 40, 0.8); border: 1px solid #c9a03e; border-radius: 24px; padding: 25px; text-align: left; }
         .stars { color: #ffd966; font-size: 1.2rem; margin-bottom: 12px; }
         .review-tag { color: #ffd966; font-size: 0.9rem; margin-top: 15px; display: block; }
@@ -278,6 +294,7 @@
             border-top: 2px solid #c9a03e; border-bottom: 2px solid #c9a03e;
             margin: 50px 0; text-align: center; position: relative;
             box-shadow: 0 0 60px rgba(201, 160, 62, 0.25);
+            width: 100%;
         }
         .contact-section::before, .contact-section::after {
             content: "❖"; position: absolute; font-size: 3rem; color: #ffd966; opacity: 0.4; text-shadow: 0 0 20px #ffd966;
@@ -290,6 +307,7 @@
             display: grid; gap: 18px; max-width: 500px; margin: 30px auto 0;
             text-align: left; position: relative; padding: 25px;
             background: rgba(14, 8, 28, 0.8); border-radius: 24px; border: 1px solid #c9a03e;
+            width: 100%;
         }
         .form-grid::before {
             content: ""; position: absolute; inset: 8px;
@@ -298,6 +316,7 @@
         input, select, textarea {
             background: rgba(20, 12, 36, 0.9); border: 1px solid #54337a; border-radius: 14px;
             padding: 14px; color: #ede4f5; font-family: 'Jost', sans-serif; font-size: 0.95rem; outline: none; transition: 0.3s;
+            width: 100%;
         }
         input:focus, select:focus, textarea:focus { border-color: #ffd966; box-shadow: 0 0 10px rgba(255,215,0,0.4); }
         select {
@@ -325,7 +344,7 @@
         .about-me summary::before { content: "✨"; }
         .about-me .details-content { margin-top: 15px; color: #cfc0e8; line-height: 1.7; font-size: 0.95rem; }
 
-        footer { text-align: left; padding: 30px 5vw; border-top: 1px solid rgba(255,215,0,0.3); color: #7b6d92; font-size: 0.9rem; }
+        footer { text-align: left; padding: 30px 5vw; border-top: 1px solid rgba(255,215,0,0.3); color: #7b6d92; font-size: 0.9rem; width: 100%; }
         footer a { color: #ffd966; }
 
         .collection-link-block {
@@ -354,6 +373,8 @@
             border: 1px solid #ffd966;
             z-index: 1001; opacity: 0; visibility: hidden;
             transition: 0.3s;
+            white-space: nowrap;
+            max-width: 90vw;
         }
         .toast.show { opacity: 1; visibility: visible; }
 
@@ -367,7 +388,7 @@
             .social-icons { align-self: center; margin-top: 5px; }
 
             .hero { padding: 50px 20px 60px; }
-            .hero h1 { font-size: 2.8rem; }
+            .hero h1 { font-size: 2.8rem; word-break: break-word; }
             .hero p { font-size: 0.9rem; margin: 12px auto; }
             .stats-row { gap: 10px; font-size: 0.85rem; justify-content: center; }
 
@@ -376,7 +397,7 @@
             .draw-card-btn { padding: 12px 30px; font-size: 1rem; }
 
             .services-grid, .reviews-grid { grid-template-columns: 1fr; gap: 20px; }
-            .service-card { padding: 20px 16px; border-radius: 22px; min-height: auto; text-align: left; }
+            .service-card { padding: 20px 16px; border-radius: 22px; min-height: auto; text-align: left; max-width: 100%; }
             .service-card h3 { font-size: 1.4rem; }
             .service-desc { font-size: 0.9rem; }
             .new-price { font-size: 1.5rem; }
