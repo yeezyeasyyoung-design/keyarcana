@@ -6,6 +6,7 @@
     <title>Оплата заказа · KeyArcana</title>
     <meta name="theme-color" content="#06040a">
     <style>
+        /* === Ваши прежние стили, без изменений === */
         body {
             background: #06040a;
             font-family: 'Jost', sans-serif;
@@ -129,7 +130,7 @@
 
     <script>
         // ============================================================
-        // ВАШИ РЕАЛЬНЫЕ ДАННЫЕ
+        // ВАШИ РЕАЛЬНЫЕ КЛЮЧИ И НАСТРОЙКИ
         // ============================================================
         const SHOP_ID = '1347435';
         const SECRET_KEY = 'live_TxAIxwMW82jYuOI1qAecWClpHfXGluTIjkRW_rNZfS8';
@@ -162,6 +163,10 @@
                 amount: {
                     value: amount.toFixed(2),
                     currency: 'RUB'
+                },
+                // 👇 Главное изменение: указываем, что нужна оплата картой
+                payment_method_data: {
+                    type: 'bank_card'
                 },
                 confirmation: {
                     type: 'embedded'
@@ -201,6 +206,9 @@
             }
         }
         
+        // ============================================================
+        // Инициализация виджета
+        // ============================================================
         function initializeWidget(confirmationToken) {
             try {
                 const checkout = new window.YooMoneyCheckoutWidget({
@@ -208,7 +216,7 @@
                     return_url: RETURN_URL,
                     error_callback: function(error) {
                         console.error('Ошибка виджета:', error);
-                        showError('Произошла ошибка при инициализации платёжной формы. Код: ' + error.error);
+                        showError('Произошла ошибка при инициализации платёжной формы.');
                     },
                     customization: {
                         colors: {
@@ -238,6 +246,9 @@
             }
         }
         
+        // ============================================================
+        // Вспомогательные функции
+        // ============================================================
         function checkPaymentResult() {
             const urlParams = new URLSearchParams(window.location.search);
             const paymentId = urlParams.get('orderId');
@@ -261,6 +272,9 @@
             });
         }
         
+        // ============================================================
+        // Запуск процесса оплаты
+        // ============================================================
         async function startPayment() {
             const paymentForm = document.getElementById('payment-form');
             paymentForm.innerHTML = '<p style="color: #ffd966;">⏳ Подготовка безопасного платежа...</p>';
