@@ -50,7 +50,9 @@
         .total-amount {
             font-size: 2rem; color: #ffd966; font-weight: 700; margin: 15px 0; text-shadow: 0 0 10px #ffd700;
         }
-        #payment-form { margin-top: 20px; }
+        .redirect-message {
+            color: #ffd966; font-size: 1.1rem; margin: 20px 0;
+        }
         .error-message {
             color: #ff6b6b; margin-top: 15px; padding: 15px;
             background: rgba(255,0,0,0.1); border-radius: 8px;
@@ -73,19 +75,30 @@
             <p><strong>Описание:</strong> <span id="service-desc">Стандартный расклад</span></p>
             <div class="total-amount"><span id="amount-display">199</span> ₽</div>
         </div>
-        <div id="payment-form"></div>
+
+        <!-- Сообщение о перенаправлении -->
+        <div id="redirect-block">
+            <p class="redirect-message">⏳ Переходим на безопасную страницу оплаты…</p>
+            <p style="color:#cfc0e8; font-size:0.9rem;">Если переход не произошёл автоматически, нажмите кнопку:</p>
+            <button id="manual-pay-btn" class="gold-btn" style="margin-top:10px;">Перейти к оплате</button>
+        </div>
+
+        <!-- Сообщение об успехе (после возврата) -->
+        <div id="success-message" class="success-message" style="display:none;">
+            ✅ Оплата прошла успешно! Заявка отправлена.<br>Результат придёт вам на почту в течение 1 часа.
+        </div>
+
         <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message">✅ Оплата прошла успешно! Заявка отправлена.<br>Результат придёт вам на почту в течение 1 часа.</div>
         <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
-    <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
     <script>
+        // ID вашего магазина в ЮKassa (тот же, что и раньше)
         const SHOP_ID = '1347435';
-        const SECRET_KEY = 'live_TxAIxwMW82jYuOI1qAecWClpHfXGluTIjkRW_rNZfS8';
-        // Убедитесь, что RETURN_URL точно соответствует адресу вашего сайта (с www или без)
-        const RETURN_URL = 'https://keyarcana.ru/oplata.html';   // можно заменить на 'https://www.keyarcana.ru/oplata.html'
+        // URL, куда вернётся покупатель после оплаты (этот же файл)
+        const RETURN_URL = 'https://keyarcana.ru/oplata.html';
 
+        // Считываем параметры из URL
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
         }
@@ -96,10 +109,12 @@
         const userName = getQueryParam('name') || '';
         const userContact = getQueryParam('contact') || '';
 
+        // Отображаем информацию о заказе
         document.getElementById('service-name').textContent = serviceName;
         document.getElementById('service-desc').textContent = serviceDesc;
         document.getElementById('amount-display').textContent = amount.toFixed(2);
 
+        // Функция отправки уведомления о заказе (после возврата)
         async function sendOrderNotification(orderId) {
             if (!userContact) return;
             const formData = new FormData();
@@ -110,98 +125,48 @@
             formData.append('message', `Имя: ${userName}\nКонтакт: ${userContact}\nУслуга: ${serviceName}\nОписание: ${serviceDesc}\nСумма: ${amount.toFixed(2)} ₽\nID платежа: ${orderId}`);
             try {
                 await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
-            } catch (e) { /* не критично */ }
-        }
-
-        async function createPayment() {
-            const idempotenceKey = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                const r = Math.random()*16|0; return (c==='x'?r:r&0x3|0x8).toString(16);
-            });
-            const paymentData = {
-                amount: { value: amount.toFixed(2), currency: 'RUB' },
-                payment_method_data: { type: 'bank_card' },
-                confirmation: { type: 'embedded' },
-                capture: true,
-                description: `${serviceName} - ${serviceDesc}`,
-                metadata: { service: serviceName, order_id: 'order_' + Date.now() }
-            };
-            try {
-                const response = await fetch('https://api.yookassa.ru/v3/payments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Basic ' + btoa(`${SHOP_ID}:${SECRET_KEY}`),
-                        'Idempotence-Key': idempotenceKey
-                    },
-                    body: JSON.stringify(paymentData)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    // Детально покажем, что вернула ЮKassa
-                    throw new Error(
-                        `Ошибка ${response.status}: ${errorData.description || 'нет описания'}\n` +
-                        `Код: ${errorData.code || 'нет кода'}\n` +
-                        `Параметр: ${errorData.parameter || '-'}`
-                    );
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Ошибка создания платежа:', error);
-                // Покажем полный текст ошибки на странице
-                showError(error.message || 'Неизвестная ошибка');
-                return null;
-            }
-        }
-
-        function initializeWidget(token) {
-            try {
-                const checkout = new window.YooMoneyCheckoutWidget({
-                    confirmation_token: token,
-                    return_url: RETURN_URL,
-                    error_callback: error => showError('Ошибка формы оплаты: ' + JSON.stringify(error)),
-                    customization: {
-                        colors: {
-                            control_primary: '#ffd966',
-                            background: '#1a112f',
-                            background_secondary: '#0e081c',
-                            border: '#54337a',
-                            text_primary: '#ede4f5',
-                            text_secondary: '#cfc0e8'
-                        }
-                    }
-                });
-                checkout.render('payment-form').catch(e => showError('Не удалось загрузить форму оплаты: ' + e.message));
+                console.log('Уведомление отправлено');
             } catch (e) {
-                showError('Ошибка загрузки платёжной системы: ' + e.message);
+                // не критично
             }
         }
 
-        function showError(msg) {
-            const el = document.getElementById('error-message');
-            el.textContent = msg;
-            el.style.display = 'block';
-            // Не скрываем автоматически, чтобы пользователь успел прочитать
-        }
-
-        async function startPayment() {
-            document.getElementById('payment-form').innerHTML = '<p style="color:#ffd966;">⏳ Подготовка платежа...</p>';
-            const payment = await createPayment();
-            if (payment?.confirmation?.confirmation_token) {
-                document.getElementById('payment-form').innerHTML = '';
-                initializeWidget(payment.confirmation.confirmation_token);
-            } else {
-                document.getElementById('payment-form').innerHTML = '';
-                // Сообщение об ошибке уже выведено в createPayment
-            }
-        }
-
+        // Проверяем, вернулся ли пользователь после оплаты
         window.addEventListener('load', () => {
             const orderId = getQueryParam('orderId');
             if (orderId) {
+                // Показываем сообщение об успехе и отправляем заявку
+                document.getElementById('redirect-block').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
                 sendOrderNotification(orderId);
             } else {
-                startPayment();
+                // Формируем данные для платёжной формы ЮKassa
+                const paymentData = {
+                    shopId: SHOP_ID,
+                    sum: amount,
+                    customerNumber: userContact || 'anonymous',
+                    paymentType: 'AC',   // банковская карта (или 'PC' для ЮMoney, 'GP' для Google Pay и т.д.)
+                    description: `${serviceName} - ${serviceDesc}`,
+                    orderNumber: 'order_' + Date.now(),
+                    returnUrl: RETURN_URL,
+                    // Дополнительные параметры можно добавить, если нужно
+                };
+
+                // Строим URL для платёжной формы
+                const queryString = Object.keys(paymentData)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(paymentData[key]))
+                    .join('&');
+                const paymentURL = 'https://yookassa.ru/checkout/pay/v1?' + queryString;
+
+                // Автоматический переход через 1 секунду
+                setTimeout(() => {
+                    window.location.href = paymentURL;
+                }, 1000);
+
+                // На случай, если авторедирект не сработал, вешаем на кнопку
+                document.getElementById('manual-pay-btn').addEventListener('click', () => {
+                    window.location.href = paymentURL;
+                });
             }
         });
     </script>
