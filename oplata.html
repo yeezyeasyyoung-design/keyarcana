@@ -51,7 +51,11 @@
             font-size: 2rem; color: #ffd966; font-weight: 700; margin: 15px 0; text-shadow: 0 0 10px #ffd700;
         }
         #payment-form { margin-top: 20px; }
-        .error-message { color: #ff6b6b; margin-top: 15px; display: none; padding: 12px; background: rgba(255,0,0,0.1); border-radius: 8px; }
+        .error-message {
+            color: #ff6b6b; margin-top: 15px; padding: 15px;
+            background: rgba(255,0,0,0.1); border-radius: 8px;
+            display: none; white-space: pre-wrap; text-align: left; font-size: 0.9rem;
+        }
         .success-message { color: #51cf66; margin-top: 15px; display: none; padding: 12px; background: rgba(81,207,102,0.1); border-radius: 8px; }
         .back-link { display: inline-block; margin-top: 20px; color: #dac0ff; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
         .back-link:hover { color: #ffd966; text-shadow: 0 0 8px #ffd966; }
@@ -79,7 +83,8 @@
     <script>
         const SHOP_ID = '1347435';
         const SECRET_KEY = 'live_TxAIxwMW82jYuOI1qAecWClpHfXGluTIjkRW_rNZfS8';
-        const RETURN_URL = 'https://www.keyarcana.ru/oplata.html';
+        // Убедитесь, что RETURN_URL точно соответствует адресу вашего сайта (с www или без)
+        const RETURN_URL = 'https://keyarcana.ru/oplata.html';   // можно заменить на 'https://www.keyarcana.ru/oplata.html'
 
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
@@ -96,6 +101,7 @@
         document.getElementById('amount-display').textContent = amount.toFixed(2);
 
         async function sendOrderNotification(orderId) {
+            if (!userContact) return;
             const formData = new FormData();
             formData.append('access_key', '6c84f063-e048-4fab-a15f-b15c9b635966');
             formData.append('name', userName);
@@ -104,14 +110,13 @@
             formData.append('message', `Имя: ${userName}\nКонтакт: ${userContact}\nУслуга: ${serviceName}\nОписание: ${serviceDesc}\nСумма: ${amount.toFixed(2)} ₽\nID платежа: ${orderId}`);
             try {
                 await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
-                console.log('Уведомление отправлено');
-            } catch (e) {
-                console.error('Ошибка отправки уведомления', e);
-            }
+            } catch (e) { /* не критично */ }
         }
 
         async function createPayment() {
-            const idempotenceKey = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random()*16|0; return (c==='x'?r:r&0x3|0x8).toString(16); });
+            const idempotenceKey = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                const r = Math.random()*16|0; return (c==='x'?r:r&0x3|0x8).toString(16);
+            });
             const paymentData = {
                 amount: { value: amount.toFixed(2), currency: 'RUB' },
                 payment_method_data: { type: 'bank_card' },
@@ -130,11 +135,20 @@
                     },
                     body: JSON.stringify(paymentData)
                 });
-                if (!response.ok) throw new Error((await response.json()).description || 'Ошибка');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    // Детально покажем, что вернула ЮKassa
+                    throw new Error(
+                        `Ошибка ${response.status}: ${errorData.description || 'нет описания'}\n` +
+                        `Код: ${errorData.code || 'нет кода'}\n` +
+                        `Параметр: ${errorData.parameter || '-'}`
+                    );
+                }
                 return await response.json();
             } catch (error) {
-                console.error(error);
-                showError('Не удалось создать платёж.');
+                console.error('Ошибка создания платежа:', error);
+                // Покажем полный текст ошибки на странице
+                showError(error.message || 'Неизвестная ошибка');
                 return null;
             }
         }
@@ -144,7 +158,7 @@
                 const checkout = new window.YooMoneyCheckoutWidget({
                     confirmation_token: token,
                     return_url: RETURN_URL,
-                    error_callback: error => showError('Ошибка формы оплаты: ' + error.error),
+                    error_callback: error => showError('Ошибка формы оплаты: ' + JSON.stringify(error)),
                     customization: {
                         colors: {
                             control_primary: '#ffd966',
@@ -156,9 +170,9 @@
                         }
                     }
                 });
-                checkout.render('payment-form').catch(e => showError('Не удалось загрузить форму оплаты.'));
+                checkout.render('payment-form').catch(e => showError('Не удалось загрузить форму оплаты: ' + e.message));
             } catch (e) {
-                showError('Ошибка загрузки платёжной системы.');
+                showError('Ошибка загрузки платёжной системы: ' + e.message);
             }
         }
 
@@ -166,7 +180,7 @@
             const el = document.getElementById('error-message');
             el.textContent = msg;
             el.style.display = 'block';
-            setTimeout(() => el.style.display = 'none', 10000);
+            // Не скрываем автоматически, чтобы пользователь успел прочитать
         }
 
         async function startPayment() {
@@ -177,7 +191,7 @@
                 initializeWidget(payment.confirmation.confirmation_token);
             } else {
                 document.getElementById('payment-form').innerHTML = '';
-                showError('Не удалось инициировать платёж.');
+                // Сообщение об ошибке уже выведено в createPayment
             }
         }
 
