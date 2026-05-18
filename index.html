@@ -9,14 +9,12 @@
     <meta name="color-scheme" content="dark">
     <meta name="yandex-verification" content="1f8906184c2d5296" />
 
-    <!-- Open Graph / соцсети -->
     <meta property="og:title" content="KeyArcana — Карты знают ответ">
     <meta property="og:description" content="Бесплатный расклад Таро за 10 секунд. Получите именной PDF‑сертификат.">
     <meta property="og:image" content="https://i.ibb.co/C5P7kBkW/geekbot-ru-1776457159268.png">
     <meta property="og:url" content="https://www.keyarcana.ru/">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Schema.org -->
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -32,7 +30,6 @@
         }
     </script>
 
-    <!-- Фавиконка -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,12 +37,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* === Сброс и основа === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html {
-            overflow-x: hidden;
-            width: 100%;
-        }
+        html { overflow-x: hidden; width: 100%; }
         body {
             background: #06040a;
             font-family: 'Jost', sans-serif;
@@ -58,10 +51,7 @@
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
         }
-        :focus-visible {
-            outline: 2px solid #ffd966;
-            outline-offset: 2px;
-        }
+        :focus-visible { outline: 2px solid #ffd966; outline-offset: 2px; }
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at 30% 20%, #1e1238 0%, #06040a 75%);
@@ -94,7 +84,6 @@
         }
         .gold { color: #ffd966; text-shadow: 0 0 8px #ffd700; }
 
-        /* Кнопки */
         .gold-btn {
             background: linear-gradient(135deg, #ffd966 0%, #c9a03e 100%);
             border: 1px solid #ffea9e;
@@ -111,7 +100,6 @@
         .gold-btn:hover { background: #ffea9e; box-shadow: 0 0 50px #ffcc00; transform: translateY(-2px); }
         .gold-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Шапка */
         header {
             padding: 15px 5vw;
             border-bottom: 1px solid rgba(255,215,0,0.3);
@@ -138,7 +126,6 @@
         .tg-icon { background: #2AABEE; } .vk-icon { background: #0077FF; } .mail-icon { background: #c9a03e; }
         .social-icon svg { fill: white; width: 16px; height: 16px; }
 
-        /* Hero */
         .hero {
             text-align: center;
             padding: 80px 5vw 100px;
@@ -159,7 +146,6 @@
         .hero p { font-size: clamp(1rem, 2.2vw, 1.3rem); max-width: 800px; margin: 20px auto; color: #cfc0e8; }
         .stats-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 25px 0; font-weight: 500; color: #ffd966; font-size: 1.1rem; }
 
-        /* Бесплатный расклад */
         .free-section {
             background: rgba(18, 10, 32, 0.9); border: 1px solid #c9a03e;
             border-radius: 32px; padding: 50px 5vw; margin: 0 5vw 50px;
@@ -184,7 +170,6 @@
         .draw-card-btn:hover { background: #634785; box-shadow: 0 0 25px #ffd966; }
         .draw-card-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Анимация раскрытия карты */
         .card-reveal {
             display: flex;
             flex-direction: column;
@@ -219,7 +204,6 @@
         .lock-box { margin-top: 20px; display: none; }
         .blur-text { filter: blur(6px); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; color: #aaa; font-size: 0.9rem; }
 
-        /* Услуги */
         .services-section { padding: 50px 5vw; width: 100%; }
         .services-grid {
             display: grid;
@@ -253,11 +237,9 @@
         .old-price { text-decoration: line-through; color: #b0a0cc; font-size: 1rem; }
         .new-price { color: #ffd966; font-weight: 700; font-size: 1.8rem; text-shadow: 0 0 5px #ffd700; }
 
-        /* Карточки без фона */
         .service-card.subscription-card { background: rgba(24,14,40,0.9); }
         .service-card.subscription-card::before { background: none; }
 
-        /* Модальное окно */
         .modal-overlay {
             display: flex;
             align-items: center; justify-content: center;
@@ -281,14 +263,12 @@
         .modal-content p { color: #cfc0e8; font-size: 1rem; line-height: 1.7; margin-bottom: 25px; }
         .modal-content .gold-btn { width: auto; }
 
-        /* Отзывы */
         .reviews-section { padding: 50px 5vw; width: 100%; }
         .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; width: 100%; }
         .review-card { background: rgba(24, 14, 40, 0.8); border: 1px solid #c9a03e; border-radius: 24px; padding: 25px; text-align: left; }
         .stars { color: #ffd966; font-size: 1.2rem; margin-bottom: 12px; }
         .review-tag { color: #ffd966; font-size: 0.9rem; margin-top: 15px; display: block; }
 
-        /* Контакты */
         .contact-section {
             padding: 50px 5vw; background: rgba(18, 10, 32, 0.9);
             border-top: 2px solid #c9a03e; border-bottom: 2px solid #c9a03e;
@@ -352,7 +332,6 @@
             padding: 25px; margin: 25px 0; text-align: center; font-size: 1.1rem;
         }
 
-        /* Кнопка "Наверх" */
         .back-to-top {
             position: fixed; bottom: 30px; right: 30px;
             width: 44px; height: 44px;
@@ -364,7 +343,6 @@
         }
         .back-to-top.visible { opacity: 1; visibility: visible; }
 
-        /* Toast-уведомления */
         .toast {
             position: fixed; bottom: 20px; left: 50%;
             transform: translateX(-50%);
@@ -378,7 +356,6 @@
         }
         .toast.show { opacity: 1; visibility: visible; }
 
-        /* Мобильная версия */
         @media (max-width: 600px) {
             body { cursor: auto; text-align: center; }
             header { flex-direction: column; align-items: center; gap: 10px; padding: 15px 20px; }
@@ -493,8 +470,7 @@
 
 <section id="contact" class="contact-section">
     <h2>✦ Записаться ✦</h2>
-    <form class="form-grid" id="requestForm" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="6c84f063-e048-4fab-a15f-b15c9b635966">
+    <form class="form-grid" id="requestForm">
         <input type="text" name="name" placeholder="Ваше имя (анонимно)" required aria-label="Ваше имя">
         <input type="text" name="contact" placeholder="Email или username" required aria-label="Email или username">
         <select name="service" required aria-label="Выберите услугу">
@@ -508,7 +484,7 @@
         </select>
         <textarea name="question" rows="4" placeholder="Вопрос (по желанию)" aria-label="Вопрос"></textarea>
         <label class="checkbox-label"><input type="checkbox" id="agreeCheckbox" required> Я согласен на обработку персональных данных</label>
-        <button type="submit" class="gold-btn" style="width:100%;">Отправить заявку</button>
+        <button type="submit" class="gold-btn" style="width:100%;">Заказать</button>
         <p class="form-error" style="color:#ff9660;display:none;margin-top:10px;">Пожалуйста, заполните все обязательные поля и дайте согласие.</p>
     </form>
 
@@ -536,7 +512,6 @@
     <p style="margin-top: 5px;">Свяжитесь с нами: <a href="mailto:key.arcana@mail.ru">key.arcana@mail.ru</a> или <a href="https://t.me/keyarcana" target="_blank">@keyarcana</a></p>
 </footer>
 
-<!-- Модальное окно -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
         <button class="modal-close" id="modalClose">&times;</button>
@@ -546,29 +521,23 @@
     </div>
 </div>
 
-<!-- Прелоадер -->
 <div id="preloader" style="position:fixed; inset:0; background:#06040a; z-index:10001; display:flex; align-items:center; justify-content:center; transition: opacity 0.5s;">
     <div style="font-size: 3rem; animation: pulse 1s infinite;">🔮</div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-<!-- Кнопка "Наверх" -->
 <button class="back-to-top" id="backToTop" title="Наверх" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
     (() => {
-        // Динамический год
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Прелоадер
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             preloader.style.opacity = '0';
             setTimeout(() => preloader.remove(), 500);
         });
 
-        // Toast
         const toastEl = document.getElementById('toast');
         function showToast(msg) {
             toastEl.textContent = msg;
@@ -577,13 +546,11 @@
             toastEl._timeout = setTimeout(() => toastEl.classList.remove('show'), 2000);
         }
 
-        // Кнопка "Наверх"
         const backToTopBtn = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             backToTopBtn.classList.toggle('visible', window.scrollY > 500);
         });
 
-        // Модальное окно (Escape, блокировка фона)
         const modalOverlay = document.getElementById('modalOverlay');
         const modalClose = document.getElementById('modalClose');
         function closeModal() {
@@ -598,7 +565,6 @@
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
         });
 
-        // Карты и коллекция
         const cards = [
             { name: "Шут", meaning: "Новые начинания, спонтанность. Доверьтесь потоку.", emoji: "🃏" },
             { name: "Маг", meaning: "Сила воли, мастерство. Используйте свои ресурсы.", emoji: "🧙" },
@@ -706,7 +672,6 @@
         }
         updateCollectionInfo();
 
-        // Долгий тап для сброса коллекции (3 сек)
         let resetTimer;
         const collectionLink = document.querySelector('.collection-link-block');
         collectionLink.addEventListener('mousedown', () => {
@@ -721,7 +686,6 @@
         collectionLink.addEventListener('mouseup', () => clearTimeout(resetTimer));
         collectionLink.addEventListener('mouseleave', () => clearTimeout(resetTimer));
 
-        // Заполнение услуг
         const servicesData = [
             { id: 'danet', title: 'Да / Нет', shortDesc: 'Мгновенный чёткий ответ на вопрос.', fullDesc: 'Расклад «Да/Нет» — самый быстрый способ получить конкретный ответ.', priceOld: '500 ₽', priceNew: '199 ₽', time: '15 мин', bg: 'https://i.ibb.co/QvSNHfhS/grok-image-1776784288839.jpg', hit: true },
             { id: 'feelings', title: 'Чувства партнёра', shortDesc: '3 карты раскрывают мысли, чувства и мотивы.', fullDesc: 'Расклад «Чувства партнёра» глубоко анализирует эмоциональную сферу.', priceOld: '990 ₽', priceNew: '790 ₽', time: '30 мин', bg: 'https://i.ibb.co/PZQgVy3W/grok-image-1776784081044.jpg', hit: true },
@@ -757,7 +721,6 @@
             servicesGrid.insertBefore(card, servicesGrid.children[0]);
         });
 
-        // Отзывы
         const testimonials = [
             { text: "«Сделала расклад перед собеседованием — карта сказала «не бояться». Прошла!»", tag: "PDF-сертификат" },
             { text: "«Подарила подруге сертификат на «Чувства партнёра». Точный до мурашек.»", tag: "Чувства партнёра" },
@@ -780,7 +743,6 @@
             revCont.appendChild(div);
         });
 
-        // Вытягивание карты
         const drawBtn = document.getElementById('drawCardBtn');
         const resultDiv = document.getElementById('cardResult');
         const lockArea = document.getElementById('lockArea');
@@ -810,16 +772,37 @@
             showToast(`🎴 ${card.name} добавлена в коллекцию`);
         });
 
-        // Отправка формы
+        // === НОВАЯ ЛОГИКА ФОРМЫ ===
         document.getElementById('requestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             const checkbox = document.getElementById('agreeCheckbox');
             if (!checkbox.checked) {
-                e.preventDefault();
                 document.querySelector('.form-error').style.display = 'block';
-            } else {
-                document.querySelector('.form-error').style.display = 'none';
-                showToast('✨ Заявка отправлена!');
+                return;
             }
+            document.querySelector('.form-error').style.display = 'none';
+
+            const name = this.querySelector('input[name="name"]').value.trim();
+            const contact = this.querySelector('input[name="contact"]').value.trim();
+            const service = this.querySelector('select[name="service"]').value;
+            const question = this.querySelector('textarea[name="question"]').value.trim();
+
+            let amount = 199;
+            if (service === 'Да / Нет') amount = 199;
+            else if (service === 'Чувства партнёра') amount = 790;
+            else if (service === 'Кельтский крест') amount = 1590;
+            else if (service === 'На год') amount = 2390;
+            else if (service === 'VIP') amount = 6990;
+            else if (service === 'PDF-сертификат') amount = 199;
+
+            const params = new URLSearchParams({
+                service: service,
+                desc: question || service,
+                amount: amount,
+                name: name,
+                contact: contact
+            });
+            window.location.href = 'oplata.html?' + params.toString();
         });
     })();
 </script>
