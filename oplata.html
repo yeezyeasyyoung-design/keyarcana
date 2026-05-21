@@ -6,6 +6,7 @@
     <title>Оплата заказа · KeyArcana</title>
     <meta name="theme-color" content="#06040a">
     <style>
+        /* Твои стили */
         body {
             background: #06040a;
             font-family: 'Jost', sans-serif;
@@ -37,68 +38,59 @@
             margin-bottom: 25px;
             text-shadow: 0 0 15px rgba(255,215,0,0.5);
         }
-        .service-info {
-            background: rgba(14, 8, 28, 0.8);
-            border: 1px solid #54337a;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            text-align: left;
+        .success-message {
+            color: #51cf66; margin-top: 15px; display: none; padding: 12px;
+            background: rgba(81,207,102,0.1); border-radius: 8px;
         }
-        .service-info p { margin: 8px 0; font-size: 1rem; color: #cfc0e8; }
-        .service-info strong { color: #ffd966; }
-        .total-amount {
-            font-size: 2rem; color: #ffd966; font-weight: 700; margin: 15px 0; text-shadow: 0 0 10px #ffd700;
-        }
-        .redirect-message {
-            color: #ffd966; font-size: 1.1rem; margin: 20px 0;
-        }
-        .error-message {
-            color: #ff6b6b; margin-top: 15px; padding: 15px;
-            background: rgba(255,0,0,0.1); border-radius: 8px;
-            display: none; white-space: pre-wrap; text-align: left; font-size: 0.9rem;
-        }
-        .success-message { color: #51cf66; margin-top: 15px; display: none; padding: 12px; background: rgba(81,207,102,0.1); border-radius: 8px; }
         .back-link { display: inline-block; margin-top: 20px; color: #dac0ff; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
         .back-link:hover { color: #ffd966; text-shadow: 0 0 8px #ffd966; }
-        @media (max-width: 600px) {
-            .payment-container { padding: 25px 18px; border-radius: 24px; }
-            h1 { font-size: 1.8rem; }
-        }
+        /* Остальные стили формы оставь как есть — они встроены в код ЮKassa */
     </style>
 </head>
 <body>
     <div class="payment-container">
         <h1>🔮 Оплата заказа</h1>
-        <div class="service-info">
-            <p><strong>Услуга:</strong> <span id="service-name">Расклад Таро</span></p>
-            <p><strong>Описание:</strong> <span id="service-desc">Стандартный расклад</span></p>
-            <div class="total-amount"><span id="amount-display">199</span> ₽</div>
-        </div>
+        
+        <!-- ВСТАВЛЯЕМ ТВОЙ КОД ФОРМЫ -->
+        <form id="yookassa-form" action="https://yoomoney.ru/quickpay/confirm.xml" method="POST">
+            <!-- Товары будут динамически заменены -->
+            <div id="ym-products"></div>
+            <input value="" type="hidden" name="ym_merchant_receipt">
 
-        <!-- Сообщение о перенаправлении -->
-        <div id="redirect-block">
-            <p class="redirect-message">⏳ Переходим на безопасную страницу оплаты…</p>
-            <p style="color:#cfc0e8; font-size:0.9rem;">Если переход не произошёл автоматически, нажмите кнопку:</p>
-            <button id="manual-pay-btn" class="gold-btn" style="margin-top:10px;">Перейти к оплате</button>
-        </div>
+            <div class="ym-customer-info">
+                <div class="ym-block-title">О покупателе</div>
+                <input class="ym-input" name="email" id="customer-email" placeholder="Телефон или Email для чека" type="text">
+            </div>
+
+            <div class="ym-payment-btn-block ym-before-line ym-align-space-between">
+                <div class="ym-input-icon-rub ym-display-none">
+                    <input name="sum" id="form-sum" placeholder="0.00" class="ym-input ym-sum-input ym-required-input" type="number" step="any" value="199">
+                </div>
+                <button data-text="Заплатить" class="ym-btn-pay ym-result-price">
+                    <span class="ym-text-crop">Заплатить</span> 
+                    <span class="ym-price-output" id="price-output">199,00 ₽</span>
+                </button>
+                <img src="https://yookassa.ru/integration/simplepay/img/iokassa-gray.svg?v=1.34.0" class="ym-logo" width="114" height="27" alt="ЮKassa">
+            </div>
+            <input name="shopId" type="hidden" value="1347435">
+        </form>
+        <!-- КОНЕЦ КОДА ЮKassa -->
 
         <!-- Сообщение об успехе (после возврата) -->
-        <div id="success-message" class="success-message" style="display:none;">
+        <div id="success-message" class="success-message">
             ✅ Оплата прошла успешно! Заявка отправлена.<br>Результат придёт вам на почту в течение 1 часа.
         </div>
 
-        <div id="error-message" class="error-message"></div>
         <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
-    <script>
-        // ID вашего магазина в ЮKassa (тот же, что и раньше)
-        const SHOP_ID = '1347435';
-        // URL, куда вернётся покупатель после оплаты (этот же файл)
-        const RETURN_URL = 'https://keyarcana.ru/oplata.html';
+    <!-- Скрипт ЮKassa (обязательно) -->
+    <script src="https://yookassa.ru/integration/simplepay/js/yookassa_construct_form.js?v=1.34.0"></script>
 
-        // Считываем параметры из URL
+    <script>
+        // ============================================================
+        // Читаем параметры из URL, переданные из index.html
+        // ============================================================
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
         }
@@ -109,12 +101,50 @@
         const userName = getQueryParam('name') || '';
         const userContact = getQueryParam('contact') || '';
 
-        // Отображаем информацию о заказе
-        document.getElementById('service-name').textContent = serviceName;
-        document.getElementById('service-desc').textContent = serviceDesc;
-        document.getElementById('amount-display').textContent = amount.toFixed(2);
+        // ============================================================
+        // Динамически формируем товар в форме
+        // ============================================================
+        function updateForm() {
+            // Устанавливаем сумму
+            document.getElementById('form-sum').value = amount.toFixed(2);
+            document.getElementById('price-output').textContent = amount.toFixed(2).replace('.', ',') + ' ₽';
 
-        // Функция отправки уведомления о заказе (после возврата)
+            // Заполняем email покупателя, если передан
+            if (userContact) {
+                document.getElementById('customer-email').value = userContact;
+            }
+
+            // Генерируем блок с одним товаром
+            const productsDiv = document.getElementById('ym-products');
+            productsDiv.innerHTML = `
+                <div class="ym-product">
+                    <div class="ym-product-line">
+                        <span class="ym-product-description">${serviceName} - ${serviceDesc}</span>
+                        <span class="ym-product-price" data-price="${amount.toFixed(2)}" data-id="custom" data-count="1">${amount.toFixed(2).replace('.', ',')} ₽</span>
+                    </div>
+                    <div class="ym-product-line ym-align-items-center">
+                        <span class="ym-label-text">Количество</span>
+                        <div class="ym-count-input">
+                            <input class="ym-input" value="1.00" type="number" step="any" disabled>
+                            <span class="ym-count-control ym-count-plus"></span>
+                            <span class="ym-count-control ym-count-minus"></span>
+                        </div>
+                    </div>
+                    <input disabled type="hidden" name="text" value="${serviceName} - ${serviceDesc}">
+                    <input disabled type="hidden" name="price" value="${amount.toFixed(2)}">
+                    <input disabled type="hidden" name="quantity" value="1">
+                    <input disabled type="hidden" name="paymentSubjectType" value="service">
+                    <input disabled type="hidden" name="paymentMethodType" value="full_prepayment">
+                    <input disabled type="hidden" name="tax" value="1">
+                </div>
+            `;
+        }
+
+        updateForm();
+
+        // ============================================================
+        // Отправка уведомления после успешной оплаты
+        // ============================================================
         async function sendOrderNotification(orderId) {
             if (!userContact) return;
             const formData = new FormData();
@@ -126,47 +156,19 @@
             try {
                 await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
                 console.log('Уведомление отправлено');
-            } catch (e) {
-                // не критично
-            }
+            } catch (e) { /* не критично */ }
         }
 
-        // Проверяем, вернулся ли пользователь после оплаты
+        // ============================================================
+        // Проверка возврата после оплаты
+        // ============================================================
         window.addEventListener('load', () => {
-            const orderId = getQueryParam('orderId');
+            const orderId = getQueryParam('orderId') || getQueryParam('paymentId');
             if (orderId) {
-                // Показываем сообщение об успехе и отправляем заявку
-                document.getElementById('redirect-block').style.display = 'none';
+                // Скрываем форму, показываем успех
+                document.getElementById('yookassa-form').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
                 sendOrderNotification(orderId);
-            } else {
-                // Формируем данные для платёжной формы ЮKassa
-                const paymentData = {
-                    shopId: SHOP_ID,
-                    sum: amount,
-                    customerNumber: userContact || 'anonymous',
-                    paymentType: 'AC',   // банковская карта (или 'PC' для ЮMoney, 'GP' для Google Pay и т.д.)
-                    description: `${serviceName} - ${serviceDesc}`,
-                    orderNumber: 'order_' + Date.now(),
-                    returnUrl: RETURN_URL,
-                    // Дополнительные параметры можно добавить, если нужно
-                };
-
-                // Строим URL для платёжной формы
-                const queryString = Object.keys(paymentData)
-                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(paymentData[key]))
-                    .join('&');
-                const paymentURL = 'https://yookassa.ru/checkout/pay/v1?' + queryString;
-
-                // Автоматический переход через 1 секунду
-                setTimeout(() => {
-                    window.location.href = paymentURL;
-                }, 1000);
-
-                // На случай, если авторедирект не сработал, вешаем на кнопку
-                document.getElementById('manual-pay-btn').addEventListener('click', () => {
-                    window.location.href = paymentURL;
-                });
             }
         });
     </script>
