@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Оплата прошла успешно · KeyArcana</title>
+    <meta name="theme-color" content="#06040a">
+    <style>
+        body {
+            background: #06040a;
+            font-family: 'Jost', sans-serif;
+            color: #ede4f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .payment-container {
+            background: rgba(24, 14, 40, 0.9);
+            border: 1px solid #c9a03e;
+            border-radius: 32px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 45px rgba(201, 160, 62, 0.2);
+            margin: 20px auto;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #ffd966;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .message {
+            color: #cfc0e8;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #ffd966 0%, #c9a03e 100%);
+            border: 1px solid #ffea9e;
+            color: #06040a;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 0 30px rgba(255,215,0,0.6);
+        }
+        .back-link:hover {
+            background: #ffea9e;
+            box-shadow: 0 0 50px #ffcc00;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .payment-container { padding: 25px 18px; border-radius: 24px; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="success-icon">✅</div>
+        <h1>Оплата прошла успешно!</h1>
+        <div class="message">
+            Спасибо за доверие, ваш заказ принят.<br>
+            В течение 1 часа вы получите результат на указанную почту или в Telegram.
+        </div>
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+    </div>
+</body>
+</html>
