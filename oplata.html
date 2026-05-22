@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Оплата заказа · KeyArcana</title>
     <meta name="theme-color" content="#06040a">
+    <!-- Стили ЮKassa -->
     <link rel="stylesheet" href="https://yookassa.ru/integration/simplepay/css/yookassa_construct_form.css?v=1.34.0">
     <style>
         body {
@@ -65,6 +66,35 @@
             transition: 0.3s;
         }
         .back-link:hover { color: #ffd966; text-shadow: 0 0 8px #ffd966; }
+
+        /* Переопределение стилей формы ЮKassa */
+        .yoomoney-payment-form,
+        .yoomoney-payment-form * {
+            color: #ede4f5 !important;
+        }
+        .ym-btn-pay,
+        .ym-btn-pay .ym-text-crop,
+        .ym-btn-pay .ym-price-output {
+            color: #06040a !important; /* кнопка остаётся с тёмным текстом */
+        }
+        .ym-input {
+            color: #ede4f5 !important;
+            background-color: rgba(20, 12, 36, 0.9) !important;
+            border-color: #54337a !important;
+        }
+        .ym-input::placeholder {
+            color: #a090b0 !important;
+        }
+        .ym-block-title {
+            color: #ffd966 !important;
+        }
+        .ym-products-title {
+            color: #ffd966 !important;
+        }
+        .ym-label-text {
+            color: #cfc0e8 !important;
+        }
+
         @media (max-width: 600px) {
             .payment-container { padding: 25px 18px; border-radius: 24px; }
             h1 { font-size: 1.8rem; }
@@ -80,11 +110,11 @@
             <div class="total-amount"><span id="amount-display">0</span> ₽</div>
         </div>
 
-        <!-- Форма ЮKassa (товары будут отфильтрованы) -->
+        <!-- Форма ЮKassa -->
         <form class="yoomoney-payment-form" id="yookassa-form" action="https://yookassa.ru/integration/simplepay/payment" method="post" accept-charset="utf-8">
             <div class="ym-products">
                 <div class="ym-block-title ym-products-title">Товары</div>
-                <!-- Товары с data-service точно как в форме ЮKassa (без ё, с пробелами как есть) -->
+                <!-- Товары с data-service -->
                 <div class="ym-product" data-service="Да/нет">
                     <div class="ym-product-line"><span class="ym-product-description">Да/нет</span><span class="ym-product-price" data-price="199">199,00&nbsp;₽</span></div>
                     <div class="ym-product-line ym-align-items-center"><span class="ym-label-text">Количество</span><div class="ym-count-input"><input class="ym-input" value="1.00" type="number" step="any"><span class="ym-count-control ym-count-plus"></span><span class="ym-count-control ym-count-minus"></span></div></div>
@@ -145,14 +175,11 @@
         <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
-    <!-- Сначала наш скрипт фильтрации, потом динамически загружаем скрипт ЮKassa -->
     <script>
-        // Вспомогательная функция
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
         }
 
-        // Приводим строку к единому виду: убираем пробелы по краям, заменяем ё на е
         function normalize(str) {
             return str.trim().replace(/ё/g, 'е').replace(/\s+/g, ' ');
         }
@@ -164,22 +191,18 @@
 
         const serviceNormalized = normalize(serviceRaw);
 
-        // Отображаем информацию
         document.getElementById('service-name').textContent = serviceRaw;
         document.getElementById('service-desc').textContent = desc || serviceRaw;
         document.getElementById('amount-display').textContent = amount.toFixed(2);
 
-        // Находим все товары и удаляем неподходящие
         const products = document.querySelectorAll('.ym-product');
         let selectedProduct = null;
-        let price = amount; // если сумма передана явно, используем её, иначе из товара
+        let price = amount;
 
         products.forEach(product => {
             const productService = product.getAttribute('data-service');
             if (normalize(productService) === serviceNormalized) {
-                // Подходящий товар – оставляем
                 selectedProduct = product;
-                // Если сумма не передана, берём из товара
                 if (!amount) {
                     const priceElement = product.querySelector('.ym-product-price');
                     if (priceElement) {
@@ -187,29 +210,23 @@
                     }
                 }
             } else {
-                // Удаляем товар из DOM
                 product.parentNode.removeChild(product);
             }
         });
 
-        // Если товар не найден, показываем ошибку и скрываем форму
         if (!selectedProduct && !amount) {
             document.getElementById('yookassa-form').style.display = 'none';
             document.getElementById('error-msg').style.display = 'block';
         } else {
-            // Устанавливаем сумму в скрытое поле и в отображение кнопки
             document.getElementById('form-sum').value = price.toFixed(2);
             document.getElementById('price-output').textContent = price.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' ₽';
             document.getElementById('amount-display').textContent = price.toFixed(2);
         }
 
-        // Устанавливаем email
         if (email) {
             document.getElementById('customer-email').value = email;
         }
 
-        // После того как товары отфильтрованы и лишние удалены, загружаем скрипт ЮKassa,
-        // чтобы он рассчитал сумму только для оставшегося товара.
         const script = document.createElement('script');
         script.src = 'https://yookassa.ru/integration/simplepay/js/yookassa_construct_form.js?v=1.34.0';
         document.body.appendChild(script);
