@@ -84,6 +84,37 @@
         }
         .gold { color: #ffd966; text-shadow: 0 0 8px #ffd700; }
 
+        /* Общие анимации для кнопок */
+        .gold-btn, .draw-card-btn, .contact-btn {
+            transition: transform 0.2s ease, box-shadow 0.3s, background 0.3s;
+        }
+        .gold-btn:active, .draw-card-btn:active, .contact-btn:active {
+            transform: scale(0.93);
+            box-shadow: 0 0 45px rgba(255,215,0,0.9);
+        }
+        /* Эффект пульсации при нажатии (Ripple) */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s, opacity 0.6s;
+        }
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+
         .gold-btn {
             background: linear-gradient(135deg, #ffd966 0%, #c9a03e 100%);
             border: 1px solid #ffea9e;
@@ -93,11 +124,8 @@
             transition: 0.3s; box-shadow: 0 0 30px rgba(255,215,0,0.6);
             display: inline-block; text-decoration: none;
             will-change: transform;
-            position: relative; overflow: hidden;
             white-space: nowrap;
         }
-        .gold-btn:active { transform: scale(0.96); }
-        .gold-btn:hover { background: #ffea9e; box-shadow: 0 0 50px #ffcc00; transform: translateY(-2px); }
         .gold-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         header {
@@ -166,39 +194,95 @@
             transition: 0.3s;
             white-space: nowrap;
         }
-        .draw-card-btn:active { transform: scale(0.96); }
-        .draw-card-btn:hover { background: #634785; box-shadow: 0 0 25px #ffd966; }
+        .draw-card-btn:active { transform: scale(0.93); }
         .draw-card-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .card-reveal {
+        /* Стилизация анимации карты */
+        .card-container {
+            perspective: 1000px;
+            width: 220px;
+            height: 330px;
+            margin: 30px auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card-flip {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
-            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
         }
-        .card-reveal .card-emoji {
-            font-size: 5rem;
+        .card-back {
+            background: linear-gradient(145deg, #2d1b4e, #1a0f2e);
+            border: 2px solid #c9a03e;
+            color: #ffd966;
+            font-size: 4rem;
+            background-image: repeating-linear-gradient(45deg, rgba(255,215,0,0.1) 0px, rgba(255,215,0,0.1) 6px, transparent 6px, transparent 12px);
+            animation: glowPulse 2s infinite alternate;
+        }
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 25px rgba(255,215,0,0.4); }
+            to { box-shadow: 0 0 55px rgba(255,215,0,0.9); }
+        }
+        .card-front {
+            background: #1a112f;
+            border: 2px solid #ffd966;
+            transform: rotateY(180deg);
+            color: #ede4f5;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(255,215,0,0.7);
+        }
+        .card-emoji {
+            font-size: 3.5rem;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px #ffd966);
+            filter: drop-shadow(0 0 12px #ffd966);
+            animation: float 3s ease-in-out infinite;
         }
-        .card-reveal .card-title {
-            font-size: 2rem;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .card-title {
+            font-size: 1.8rem;
             color: #ffd966;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
-        .card-reveal .card-meaning {
-            font-size: 1.1rem;
+        .card-meaning {
+            font-size: 1rem;
             color: #e0d4f5;
-            max-width: 400px;
-            text-align: center;
-            word-break: break-word;
+            line-height: 1.5;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Адаптация для телефонов */
+        @media (max-width: 600px) {
+            .card-container {
+                width: 180px;
+                height: 270px;
+                margin: 20px auto;
+            }
+            .card-back { font-size: 3rem; }
+            .card-emoji { font-size: 2.8rem; }
+            .card-title { font-size: 1.4rem; }
+            .card-meaning { font-size: 0.9rem; }
         }
 
         .lock-box { margin-top: 20px; display: none; }
@@ -219,6 +303,13 @@
             display: flex; flex-direction: column; gap: 15px; text-align: left; overflow: hidden;
             box-shadow: 0 0 0 rgba(201, 160, 62, 0); cursor: pointer; isolation: isolate; min-height: 300px;
             max-width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         .service-card::before {
             content: ""; position: absolute; inset: 0;
@@ -257,6 +348,11 @@
             padding: 30px 25px; max-width: 600px; width: 90%; text-align: left; position: relative;
             box-shadow: 0 0 60px rgba(255,215,0,0.4);
             margin: 0 auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #ffd966; font-size: 2rem; cursor: pointer; }
         .modal-content h3 { color: #ffd966; font-size: 2rem; margin-bottom: 20px; }
@@ -265,7 +361,16 @@
 
         .reviews-section { padding: 50px 5vw; width: 100%; }
         .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; width: 100%; }
-        .review-card { background: rgba(24, 14, 40, 0.8); border: 1px solid #c9a03e; border-radius: 24px; padding: 25px; text-align: left; }
+        .review-card {
+            background: rgba(24, 14, 40, 0.8); border: 1px solid #c9a03e; border-radius: 24px; padding: 25px; text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .review-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .stars { color: #ffd966; font-size: 1.2rem; margin-bottom: 12px; }
         .review-tag { color: #ffd966; font-size: 0.9rem; margin-top: 15px; display: block; }
 
@@ -315,7 +420,6 @@
             background: rgba(255,255,255,0.05); border: 1px solid #ffd966; color: #ffd966;
             text-decoration: none; font-weight: 500; transition: 0.3s; font-size: 0.95rem;
         }
-        .contact-btn:hover { background: #ffd966; color: #06040a; box-shadow: 0 0 25px #ffd966; }
 
         .about-me { margin: 30px auto 0; max-width: 500px; text-align: left; }
         .about-me details { background: rgba(20, 10, 32, 0.95); border: 1px solid #c9a03e; border-radius: 20px; padding: 15px 20px; transition: all 0.3s; }
@@ -387,9 +491,6 @@
             .gold-btn { padding: 12px 25px; font-size: 0.9rem; }
             .modal-content { padding: 25px 20px; }
 
-            .card-reveal .card-emoji { font-size: 4rem; }
-            .card-reveal .card-title { font-size: 1.6rem; }
-            .card-reveal .card-meaning { font-size: 1rem; }
             .collection-link-block { padding: 20px; font-size: 1rem; }
             footer { padding: 25px 20px; font-size: 0.8rem; text-align: center; }
             .back-to-top { right: 15px; bottom: 20px; width: 40px; height: 40px; }
@@ -423,21 +524,20 @@
         <span>✦ 98% точность</span>
         <span>✦ 4.9★ рейтинг</span>
     </div>
-    <a href="#free" class="gold-btn">✦ Вытянуть карту</a>
+    <a href="#free" class="gold-btn ripple">✦ Вытянуть карту</a>
 </section>
 
-<section id="free" class="free-section">
+<section id="free" class="free-section fade-in">
     <h3>Вытяни карту</h3>
     <p>Сосредоточьтесь на своём вопросе · Полная анонимность · Без регистрации · Ответ за 10 секунд</p>
-    <button id="drawCardBtn" class="draw-card-btn">✦ Получить расклад</button>
+    <button id="drawCardBtn" class="draw-card-btn ripple">✦ Получить расклад</button>
     <p id="freeLimitMsg" style="color: #ffd966; margin-top: 15px; display: none;">Бесплатные расклады закончились. Следующая порция через <span id="timerDisplay"></span>.</p>
-    <div id="cardFlipContainer" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;"></div>
     <div id="cardResult"></div>
     <div id="lockArea" class="lock-box">
         <div class="blur-text">Полная расшифровка и именной PDF-сертификат</div>
         <p style="margin: 10px;">🔒</p>
-        <button class="gold-btn" id="payBtn">Получить сертификат за 199₽</button>
-        <button class="gold-btn" id="shareBtn" style="background: #4b3366; margin-left:10px;">📤 Поделиться</button>
+        <button class="gold-btn ripple" id="payBtn">Получить сертификат за 199₽</button>
+        <button class="gold-btn ripple" id="shareBtn" style="background: #4b3366; margin-left:10px;">📤 Поделиться</button>
     </div>
     <div class="collection-link-block">
         <p>📦 <span id="collectionCount">0</span>/22 карт собрано</p>
@@ -445,30 +545,17 @@
     </div>
 </section>
 
-<section id="services" class="services-section">
+<section id="services" class="services-section fade-in">
     <h2>✦ Услуги и цены</h2>
-    <div class="services-grid" id="servicesGrid">
-        <div class="service-card subscription-card" style="text-align:center;">
-            <h3 style="text-align:center;">Подписка на месяц</h3>
-            <div class="service-desc">5 любых сертификатов · эксклюзивные расклады недели</div>
-            <div class="price-block"><span class="old-price">1 500 ₽</span> <span class="new-price" style="font-size:2.2rem;">699 ₽</span></div>
-            <button class="gold-btn" style="margin-top:15px;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Оформить</button>
-        </div>
-        <div class="service-card subscription-card" style="text-align:center;">
-            <h3 style="text-align:center;">Пакет «Три в одном»</h3>
-            <div class="service-desc">Да/Нет + Чувства + Кельтский крест</div>
-            <div class="price-block"><span class="old-price">3 250 ₽</span> <span class="new-price" style="font-size:2.2rem;">2 490 ₽</span></div>
-            <button class="gold-btn" style="margin-top:15px;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Купить пакет</button>
-        </div>
-    </div>
+    <div class="services-grid" id="servicesGrid"></div>
 </section>
 
-<section id="reviews" class="reviews-section">
+<section id="reviews" class="reviews-section fade-in">
     <h2>✦ Отзывы</h2>
     <div class="reviews-grid" id="reviewsContainer"></div>
 </section>
 
-<section id="contact" class="contact-section">
+<section id="contact" class="contact-section fade-in">
     <h2>✦ Записаться ✦</h2>
     <form class="form-grid" id="requestForm">
         <input type="text" name="name" placeholder="Ваше имя (анонимно)" required aria-label="Ваше имя">
@@ -484,7 +571,7 @@
         </select>
         <textarea name="question" rows="4" placeholder="Вопрос (по желанию)" aria-label="Вопрос"></textarea>
         <label class="checkbox-label"><input type="checkbox" id="agreeCheckbox" required> Я согласен на обработку персональных данных</label>
-        <button type="submit" class="gold-btn" style="width:100%;">Заказать</button>
+        <button type="submit" class="gold-btn ripple" style="width:100%;">Заказать</button>
         <p class="form-error" style="color:#ff9660;display:none;margin-top:10px;">Пожалуйста, заполните все обязательные поля и дайте согласие.</p>
     </form>
 
@@ -517,7 +604,7 @@
         <button class="modal-close" id="modalClose">&times;</button>
         <h3 id="modalTitle"></h3>
         <p id="modalDesc"></p>
-        <button class="gold-btn" id="modalOrderBtn">Заказать</button>
+        <button class="gold-btn ripple" id="modalOrderBtn">Заказать</button>
     </div>
 </div>
 
@@ -536,6 +623,20 @@
             const preloader = document.getElementById('preloader');
             preloader.style.opacity = '0';
             setTimeout(() => preloader.remove(), 500);
+        });
+
+        // Intersection Observer для анимаций появления
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in, .service-card, .review-card').forEach(el => {
+            observer.observe(el);
         });
 
         const toastEl = document.getElementById('toast');
@@ -686,6 +787,7 @@
         collectionLink.addEventListener('mouseup', () => clearTimeout(resetTimer));
         collectionLink.addEventListener('mouseleave', () => clearTimeout(resetTimer));
 
+        // Заполнение услуг
         const servicesData = [
             { id: 'danet', title: 'Да / Нет', shortDesc: 'Мгновенный чёткий ответ на вопрос.', fullDesc: 'Расклад «Да/Нет» — самый быстрый способ получить конкретный ответ.', priceOld: '500 ₽', priceNew: '199 ₽', time: '15 мин', bg: 'https://i.ibb.co/QvSNHfhS/grok-image-1776784288839.jpg', hit: true },
             { id: 'feelings', title: 'Чувства партнёра', shortDesc: '3 карты раскрывают мысли, чувства и мотивы.', fullDesc: 'Расклад «Чувства партнёра» глубоко анализирует эмоциональную сферу.', priceOld: '990 ₽', priceNew: '790 ₽', time: '30 мин', bg: 'https://i.ibb.co/PZQgVy3W/grok-image-1776784081044.jpg', hit: true },
@@ -718,9 +820,11 @@
                 modalOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
             });
-            servicesGrid.insertBefore(card, servicesGrid.children[0]);
+            servicesGrid.appendChild(card);
+            observer.observe(card);
         });
 
+        // Отзывы
         const testimonials = [
             { text: "«Сделала расклад перед собеседованием — карта сказала «не бояться». Прошла!»", tag: "PDF-сертификат" },
             { text: "«Подарила подруге сертификат на «Чувства партнёра». Точный до мурашек.»", tag: "Чувства партнёра" },
@@ -741,8 +845,10 @@
             div.className = 'review-card';
             div.innerHTML = `<div class="stars">★★★★★</div><p>${t.text}</p><span class="review-tag">✦ ${t.tag}</span>`;
             revCont.appendChild(div);
+            observer.observe(div);
         });
 
+        // Анимация доставания карты
         const drawBtn = document.getElementById('drawCardBtn');
         const resultDiv = document.getElementById('cardResult');
         const lockArea = document.getElementById('lockArea');
@@ -752,13 +858,26 @@
                 return;
             }
             const card = cards[Math.floor(Math.random() * cards.length)];
-            resultDiv.innerHTML = `
-                <div class="card-reveal">
-                    <div class="card-emoji">${card.emoji}</div>
-                    <div class="card-title">${card.name}</div>
-                    <div class="card-meaning">${card.meaning}</div>
+            // Создаем контейнер с переворотом
+            const container = document.createElement('div');
+            container.className = 'card-container';
+            container.innerHTML = `
+                <div class="card-flip" id="cardFlip">
+                    <div class="card-back">✦</div>
+                    <div class="card-front">
+                        <div class="card-emoji">${card.emoji}</div>
+                        <div class="card-title">${card.name}</div>
+                        <div class="card-meaning">${card.meaning}</div>
+                    </div>
                 </div>
             `;
+            resultDiv.innerHTML = '';
+            resultDiv.appendChild(container);
+            // Запускаем переворот через небольшую задержку для эффекта "доставания"
+            setTimeout(() => {
+                const flip = document.getElementById('cardFlip');
+                if (flip) flip.classList.add('flipped');
+            }, 500);
             lockArea.style.display = 'block';
             addToCollection(card.name);
             updateCollectionInfo();
@@ -772,7 +891,7 @@
             showToast(`🎴 ${card.name} добавлена в коллекцию`);
         });
 
-        // === НОВАЯ ЛОГИКА ФОРМЫ ===
+        // Отправка формы
         document.getElementById('requestForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const checkbox = document.getElementById('agreeCheckbox');
